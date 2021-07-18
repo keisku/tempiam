@@ -1,7 +1,27 @@
 apiVersion: tempiam.tempiam.io/v1alpha1
 kind: GCPRoleBinding
 metadata:
-  name: gcprolebinding-sample
+  name: project-sample
 spec:
-  # Add fields here
-  foo: bar
+  project: your-project-id
+  roles:
+    - roles/viewer
+  ttl: 120h
+  members:
+    - user:sample-user-1@tempiam.com
+    - user:sample-user-2@tempiam.com
+    - user:sample-user-2@tempiam.com
+---
+apiVersion: tempiam.tempiam.io/v1alpha1
+kind: GCPRoleBinding
+metadata:
+  name: folder-sample
+spec:
+  folder: your-folder-id
+  role:
+    - roles/resourcemanager.folderAdmin
+    - roles/logging.admin
+  ttl: 3d
+  members:
+    - group:sample-team-1@tempiam.com
+    - group:sample-team-2@tempiam.com
