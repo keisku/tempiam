@@ -1,0 +1,24 @@
+# permissions for end users to edit gcprolebindings.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gcprolebinding-editor-role
+rules:
+- apiGroups:
+  - tempiam.tempiam.io
+  resources:
+  - gcprolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tempiam.tempiam.io
+  resources:
+  - gcprolebindings/status
+  verbs:
+  - get
