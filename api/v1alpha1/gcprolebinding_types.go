@@ -28,20 +28,47 @@ type GCPRoleBindingSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of GCPRoleBinding. Edit gcprolebinding_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Project is the project that resources exists relating to the role.
+	// It Cannot be set with folder at the same time.
+	// +optional
+	Project string `json:"project,omitempty"`
+
+	// Folder is the folder that projects exists relating to the role.
+	// It Cannot be set with project at the same time.
+	// +optional
+	Folder string `json:"folder,omitempty"`
+
+	// Roles specify the roles that should be applied.
+	// Note that custom roles must be of the format [projects|organizations]/{parent-name}/roles/{role-name}.
+	// +required
+	Roles []string `json:"roles"`
+
+	// TTL specifies time to live since the GCPRoleBindingSpec was applied or modified.
+	// After exceeding ttl, the role binding created by this comtroller will be deleted.
+	// Acceptable units are "d", "h", "m".
+	// +required
+	TTL string `json:"ttl"`
+
+	// Members specifies identities that will be granted the privilege in role.
+	// user:{emailid}: An email address that represents a specific Google account. For example, alice@gmail.com or joe@example.com.
+	// serviceAccount:{emailid}: An email address that represents a service account. For example, my-other-app@appspot.gserviceaccount.com.
+	// group:{emailid}: An email address that represents a Google group. For example, admins@example.com.
+	// domain:{domain}: A G Suite domain (primary, instead of alias) name that represents all the users of that domain. For example, google.com or example.com.
+	// +required
+	Members []string `json:"members"`
 }
 
 // GCPRoleBindingStatus defines the observed state of GCPRoleBinding
 type GCPRoleBindingStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// LastSpecModifiedTimestamp specifies when the GCPRoleBindingSpec was modified.
+	// +required
+	LastSpecModifiedTimestamp metav1.Time `json:"lastSpecModifiedTimestamp,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// GCPRoleBinding is the Schema for the gcprolebindings API
+// GCPRoleBinding is the Schema for the iams API
 type GCPRoleBinding struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

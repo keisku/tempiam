@@ -1,0 +1,96 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: gcprolebindings.tempiam.tempiam.io
+spec:
+  group: tempiam.tempiam.io
+  names:
+    kind: GCPRoleBinding
+    listKind: GCPRoleBindingList
+    plural: gcprolebindings
+    singular: gcprolebinding
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: GCPRoleBinding is the Schema for the iams API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: GCPRoleBindingSpec defines the desired state of GCPRoleBinding
+            properties:
+              folder:
+                description: Folder is the folder that projects exists relating to
+                  the role. It Cannot be set with project at the same time.
+                type: string
+              members:
+                description: 'Members specifies identities that will be granted the
+                  privilege in role. user:{emailid}: An email address that represents
+                  a specific Google account. For example, alice@gmail.com or joe@example.com.
+                  serviceAccount:{emailid}: An email address that represents a service
+                  account. For example, my-other-app@appspot.gserviceaccount.com.
+                  group:{emailid}: An email address that represents a Google group.
+                  For example, admins@example.com. domain:{domain}: A G Suite domain
+                  (primary, instead of alias) name that represents all the users of
+                  that domain. For example, google.com or example.com.'
+                items:
+                  type: string
+                type: array
+              project:
+                description: Project is the project that resources exists relating
+                  to the role. It Cannot be set with folder at the same time.
+                type: string
+              roles:
+                description: Roles specify the roles that should be applied. Note
+                  that custom roles must be of the format [projects|organizations]/{parent-name}/roles/{role-name}.
+                items:
+                  type: string
+                type: array
+              ttl:
+                description: TTL specifies time to live since the GCPRoleBindingSpec
+                  was applied or modified. After exceeding ttl, the role binding created
+                  by this comtroller will be deleted. Acceptable units are "d", "h",
+                  "m".
+                type: string
+            required:
+            - members
+            - roles
+            - ttl
+            type: object
+          status:
+            description: GCPRoleBindingStatus defines the observed state of GCPRoleBinding
+            properties:
+              lastSpecModifiedTimestamp:
+                description: LastSpecModifiedTimestamp specifies when the GCPRoleBindingSpec
+                  was modified.
+                format: date-time
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
